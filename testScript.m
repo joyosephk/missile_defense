@@ -44,10 +44,10 @@ num_future_missiles = 3;
 
 %% Threat Calculation
 % Example X
-X = [1 0 0 0 1;
-    0 1 0 0 0;
-    0 0 1 0 0;
-    0 0 0 0 2];
+X = [0 0 2 2 0;
+    2 1 0 0 0;
+    0 0 0 2 0;
+    0 0 0 0 3];
 
 % Current threat
 [~, p_survival_current] = objecfun(X, mmat, p_target, ship_values);
@@ -55,11 +55,11 @@ X = [1 0 0 0 1;
 % Future threat
 ammo_remaining = ammo - sum(X,2);
 
-% Approach 1:  Monte Carlo
-num_episodes = 10;
-[score_future1, p_survival_future1, score_history, p_survival_history] = ...
-    montecarlo(ammo_remaining,ship_values, num_future_missiles, num_episodes);
-save('test.mat');
+% % Approach 1:  Monte Carlo
+% num_episodes = 10;
+% [score_future1, p_survival_future1, score_history, p_survival_history] = ...
+%     montecarlo(ammo_remaining,ship_values, num_future_missiles, num_episodes);
+% % save('test.mat');
 
 % Approach 2:  Treat each missile as a weight average missile.  Targeting
 % is also assumed to be uniformly distributed
@@ -75,5 +75,10 @@ avg_ptarget = repmat(ones(num_ships,1)/num_ships, 1, num_future_missiles);
 % Approach 3: Taking account the distribution of missile types
 [~,score_future3, p_survival_future3] = solveAssignment2...
     (num_future_missiles, ammo_remaining, ship_values);
+
+
+% Total survival
+p_survival_total = p_survival_current .* p_survival_future2;
+total_score = ship_values * p_survival_total;
 
 
