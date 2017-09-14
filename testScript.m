@@ -44,13 +44,13 @@ num_future_missiles = 3;
 
 %% Threat Calculation
 % Example X
-X = [0 0 2 2 0;
+X = [0 1 2 2 0;
     2 1 0 0 0;
-    0 0 0 2 0;
-    0 0 0 0 3];
+    0 0 1 2 0;
+    0 0 0 3 3];
 
 % Current threat
-[~, p_survival_current] = objecfun(X, mmat, p_target, ship_values);
+[f, p_survival_current] = objecfun(X, mmat, p_target, ship_values);
 
 % Future threat
 ammo_remaining = ammo - sum(X,2);
